@@ -27,26 +27,8 @@ var display = document.querySelector('#time');
 
 
 
-var correctResponse = function() {
-	console.log('right');
-	i++;
-	pauseTimer=true;
-	// startTimer(30,display)
-	nextQuestion();
-};
 
-var wrongResponse = function() {
-	console.log('wrong');
-	i++;
-	nextQuestion();
-	return
-}
 
-var endGame = function() {
-	console.log('game over')
-	mainFieldEl.addEventListener('click',displayStart)
-	i=0
-};
 
 
 var i = 0;	
@@ -54,6 +36,10 @@ var beginGame = function() {
 	//logic to start the timer
 	nextQuestion();
 	return
+}
+
+var postQuestionHandler = function () {
+	console.log('now what??')
 }
 
 var nextQuestion = function() {
@@ -79,6 +65,7 @@ var nextQuestion = function() {
 		mainFieldEl.appendChild(questionScreen);
 
 		var responseSelected = function(event) {
+			questionScreen.removeEventListener('click',responseSelected);
 			var clickedItem = event.target.closest('.response-button')
 			if(!clickedItem) {
 				return false;
@@ -91,17 +78,17 @@ var nextQuestion = function() {
 			else {
 				feedbackReply.textContent='Wrong'
 			}
-			var viewResultsButton = document.createElement('button')
-			feedbackDiv.appendChild(viewResultsButton)
+			var postQuestionButton = document.createElement('button')
+			feedbackDiv.appendChild(postQuestionButton)
 			if (i === questionsArray - 1) {
-				viewResultsButton.className = 'results-button'
-				viewResultsButton.texContent = 'View Results'
+				postQuestionButton.className = 'results-button'
+				postQuestionButton.texContent = 'View Results'
 			}
 			else {
-				viewResultsButton.className = 'next-question-button'
-				viewResultsButton.texContent = 'Next Question'
+				postQuestionButton.className = 'next-question-button'
+				postQuestionButton.texContent = 'Next Question'
 			}
-			var nextQuestionButton 	
+			postQuestionButton.addEventListener('click',postQuestionHandler)
 		}
 		questionScreen.addEventListener('click',responseSelected)
 };
