@@ -12,18 +12,27 @@
 }
 
 header {
+  height:15vh;
   display: flex;
   justify-content: space-between;
   margin: 20px 50px;
 }
 
-main {
-  height: 80vh;
+.display-screen {
+  display: block;
+  margin: 0 20% 15px 20% ;
 }
 
-.main-field {
-  height: 100%;
+.main {
+  margin: 0 0 15px 0;
+}
+
+footer {
+  height:2.5rem;
+  position: absolute;
+  bottom:0;
   width: 100%;
+  padding: 0 20px 0 20px;
 }
 
 .landing-page {
@@ -33,12 +42,7 @@ main {
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
-
 }
-
-/*button {
-  background: rgb(235, 42, 151);
-}*/
 
 button:hover {
   background: purple;
@@ -58,10 +62,28 @@ button {
   color: white;
 }
 
+h2 {
+  font-size: 2.5rem;
+  padding: 10px;
+  text-align: left;
+}
+
 h1, p {
 width: 100%;
 text-align: center;
 margin: 30px;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-weight: normal;
+  color: grey;
+  font-size: 2.5rem;
+  margin: 5px;
+  font-style: italic;
 }
 
 .response-button {
@@ -71,6 +93,5 @@ margin: 30px;
 }
 
 .feedback-container {
-  height: 10vh;
-  background-color: grey;
-}
+  border-top: 1px solid black;
+  /*height: 10vh;*/
