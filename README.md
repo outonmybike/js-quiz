@@ -10,4 +10,4 @@ https://outonmybike.github.io/js-quiz/
 https://www.w3schools.com/quiztest/quiztest.asp?qtest=JS
 
 ## Application Screenshot
-![Alt text](./app_screenshot.png?raw=true "Screenshot")
+![Alt text](./assets/img/app_screenshot.png?raw=true "Screenshot")
