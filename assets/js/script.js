@@ -35,7 +35,7 @@ var highScoreArray = []
 
 var scoreAndTimer = 60
 
-var challengeRulesContent = 'Here are the rules of the challenge enter as many as you want Lucas ipsum dolor sit amet qui-gonn leia darth luke vader fett cade jinn hutt naboo. Lucas ipsum dolor sit amet qui-gonn leia darth luke vader fett cade jinn hutt naboo.'
+var challengeRulesContent = 'You will be asked 5 questions. You have 60 seconds to complete the quiz. For each question you get wrong, 5 seconds will be deducted from your time. The time you have left at the end will be your score.'
 var mainFieldEl = document.querySelector('#main');
 var feedbackDiv = document.querySelector('#feedback')
 var display = document.querySelector('#time');
