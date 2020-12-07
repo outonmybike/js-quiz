@@ -7,66 +7,84 @@ var questionsArray =[
 	},
 	{
 		order: 0,
-		title: 'Who is your daddy?',
-		responses: ['Scott','Larry','Jared','Kyle'],
-		correct: 'Scott'
+		title: 'How do you create a function in JavaScript?',
+		responses: ['A) function:myFunction()','B) function myFunction()','C) function = myFunction()'],
+		correct: 'B) function myFunction()'
 	},
-	// {
-	// 	order: 0,
-	// 	title: 'Who is your daddy?',
-	// 	responses: ['Scott','Larry','Jared','Kyle'],
-	// 	correct: 'Scott'
-	// },
-	// {
-	// 	order: 0,
-	// 	title: 'Who is your daddy?',
-	// 	responses: ['Scott','Larry','Jared','Kyle'],
-	// 	correct: 'Scott'
-	// },
-	// {
-	// 	order: 0,
-	// 	title: 'Who is your daddy?',
-	// 	responses: ['Scott','Larry','Jared','Kyle'],
-	// 	correct: 'Scott'
-	// },
-	// {
-	// 	order: 0,
-	// 	title: 'Who is your daddy?',
-	// 	responses: ['Scott','Larry','Jared','Kyle'],
-	// 	correct: 'Scott'
-	// },
+	{
+		order: 0,
+		title: 'What is the correct syntax for referring to an external script called "xxx.js"?',
+		responses: ['A) <script href="xxx.js">','B) <script name="xxx.js">','C) <script src="xxx.js">'],
+		correct: 'C) <script src="xxx.js">'
+	},
+	{
+		order: 0,
+		title: 'How to write an IF statement for executing some code if "i" is NOT equal to 5?',
+		responses: ['A) if i <> 5','B) if (i != 5)', 'C) if i=!5 then','D) if(i<>5)'],
+		correct: 'B) if (i != 5)'
+	},
+	{
+		order: 0,
+		title: 'How do you write "Hello World" in an alert box?',
+		responses: ['A) msgBox("Hello World");','B) alert("Hello World");','C) alertBox("Hello World");','D) msg("Hello World");'],
+		correct: 'B) alert("Hello World");'
+	}
 ]
 
-var highScoreArray = [
-	{
-	initials: 'DN',
-	score: 11,
-	},
-	{
-	initials: 'MB',
-	score: 19,
-	},
-	{
-	initials: 'YM',
-	score: 1,
-	},
-]
+var highScoreArray = []
 
+var scoreAndTimer = 60
 
-
-var scoreValue = 18
 var challengeRulesContent = 'Here are the rules of the challenge enter as many as you want Lucas ipsum dolor sit amet qui-gonn leia darth luke vader fett cade jinn hutt naboo. Lucas ipsum dolor sit amet qui-gonn leia darth luke vader fett cade jinn hutt naboo.'
 var mainFieldEl = document.querySelector('#main');
 var feedbackDiv = document.querySelector('#feedback')
 var display = document.querySelector('#time');
 var prevScreen = document.querySelector('section')
 
+var restartGame = function() {
+	var prevScreen = document.querySelector('section')
+	if(prevScreen) {
+		prevScreen.remove()
+	}
+	for(i=0;i<highScoreArray.length;i++) {
+		highScoreArray[i].current=false
+	}
+	landingPage()
+	return;
+}
+
+let timerID;
+
+var reduceScore = function() {
+	scoreAndTimer --;
+	document.getElementById('time').innerHTML=scoreAndTimer;
+	if(scoreAndTimer===0){
+		timeUp();
+	}
+}
+
+var stopTimer = function() {
+	clearInterval(timerID);
+	document.getElementById('time').innerHTML=scoreAndTimer;
+}
+
+
+var resetHighScores = function() {
+	highScoreArray = []
+	localStorage.setItem('highScores',JSON.stringify(highScoreArray));
+	restartGame();
+	return;
+}
+
+var timeUp = function() {
+	alert('Your time has expired')
+	viewresultsPage();	
+}
 
 var viewHighScores = function() {
 	var prevScreen = document.querySelector('section')
 	prevScreen.remove()
 	var prevFeedback = document.querySelector('.feedback-container')
-	console.log('high scores')
 	prevFeedback.remove();
 	var questionScreen = document.createElement('section');
 	mainFieldEl.appendChild(questionScreen)
@@ -86,37 +104,43 @@ var viewHighScores = function() {
 	questionScreen.appendChild(buttonBar)
 	buttonBar.className = 'button-bar'
 	buttonBar.innerHTML = '<button class="go-back" id="go-back">Go Back</button><button class="clear-high-scores" id="clear-high-scores">Clear High Scores</button'
-	var goBack = document.createElement('button')
-	// goBack.innerHTML = 'button class'
+	var goBack = document.querySelector('.go-back')
+	var clearHighScores = document.querySelector('.clear-high-scores')
+	localStorage.setItem('highScores',JSON.stringify(highScoreArray));
+	goBack.addEventListener('click',restartGame)
+	clearHighScores.addEventListener('click',resetHighScores)
+	return
 }
-
-
-
 
 var submitHighScore = function() {
 	var scoreName = document.querySelector('input[name="initial-box"]').value
+	var savedScores = localStorage.getItem('highScores');
+	if(savedScores){
+		highScoreArray=JSON.parse(savedScores)
+	}
+	for(i=0;i<highScoreArray.length;i++) {
+		highScoreArray[i].current=false
+	}
+
 	var scoreEntry = {
 		initials: scoreName,
-		score: scoreValue,
+		score: scoreAndTimer,
 		current: true
 		}
 	highScoreArray.push(scoreEntry)
-
-
 	highScoreArray.sort((a,b) => (a.score < b.score) ? 1 : -1)
-	console.log(highScoreArray)
-
 	viewHighScores();
 	return;
 }
 
 
 var viewresultsPage = function() {
+	stopTimer();
 	var prevScreen = document.querySelector('section')
 	prevScreen.remove()
 
 	var questionScreen = document.createElement('section');
-	questionScreen.innerHTML='<h2>Quiz Complete</h2><h4>Your final score is: '+scoreValue+'</h4>'
+	questionScreen.innerHTML='<h2>Quiz Complete</h2><h4>Your final score is: '+scoreAndTimer+'</h4>'
 
 	var highScoreInput = document.createElement('div')
 	highScoreInput.className='enter-initials'
@@ -133,11 +157,12 @@ var viewresultsPage = function() {
 
 var i = 0;	
 var beginGame = function() {
-	//logic to start the timer
+	i=0
+	scoreAndTimer = 60;
+	timerID = setInterval(reduceScore,1000);
 	nextQuestion();
 	return
 }
-
 
 var nextQuestion = function() {
 	var prevScreen = document.querySelector('section')
@@ -163,7 +188,6 @@ var nextQuestion = function() {
 	return
 }
 
-
 var responseSelected = function(event) {
 	var clickedItem = event.target.closest('.response-button')
 	if(!clickedItem) {
@@ -182,6 +206,7 @@ var responseSelected = function(event) {
 	}
 	else {
 		feedBackTextBox.innerHTML='<h3>Wrong!</h3>'
+		scoreAndTimer -= 5
 	}
 	i++;
 	if(i===questionsArray.length) {
@@ -195,10 +220,9 @@ var responseSelected = function(event) {
 	return
 	}
 
-
-
-
 var landingPage = function() {
+	scoreAndTimer = 60
+	document.getElementById('time').innerHTML=scoreAndTimer;
 	var startScreenEl = document.createElement('section');
 	startScreenEl.className = 'landing-page';
 	startScreenEl.innerHTML = '<h1>Coding Quiz Challenge</h1><p>'+challengeRulesContent+'</p>'
@@ -213,39 +237,5 @@ var landingPage = function() {
 };
 
 landingPage();
-
-
-
-// var startTimer = function (duration,display) {
-// 	var timer = duration, seconds;
-// 	setInterval(function(){
-// 		seconds = parseInt(timer % 60,10);
-// 		display.textContent = seconds;
-// 		if (--timer < 0) {
-// 			endGame();
-// 		}
-// 	}, 1000);
-// }
-// window.onload=function() {
-// 	var sixty = 60,
-// 	display = document.querySelector('#time');
-// 	startTimer(sixty,display)
-// }
-
-
-
-// var startTimer = function (duration,display) {
-// 	var timer = duration, seconds;
-// 	setInterval(function(){
-// 		seconds = parseInt(timer % 60,10);
-// 		display.textContent = seconds;
-// 		if (--timer < 0) {
-// 			endGame();
-// 		}
-// 		if(pauseTimer) {
-// 			return
-// 		}
-// 	}, 1000);
-// }
 
 
