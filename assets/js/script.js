@@ -82,10 +82,16 @@ var timeUp = function() {
 }
 
 var viewHighScores = function() {
+	stopTimer();	
 	var prevScreen = document.querySelector('section')
-	prevScreen.remove()
+	if(prevScreen) {
+		prevScreen.remove()
+	}
 	var prevFeedback = document.querySelector('.feedback-container')
-	prevFeedback.remove();
+	if(prevFeedback){
+		prevFeedback.remove();		
+	}
+
 	var questionScreen = document.createElement('section');
 	mainFieldEl.appendChild(questionScreen)
 	questionScreen.innerHTML='<h2>High Scores</h2>'
@@ -235,6 +241,9 @@ var landingPage = function() {
 	startButtonEl.addEventListener('click',beginGame);
 	return
 };
+
+var highScoreLink = document.querySelector('.high-score-link')
+highScoreLink.addEventListener('click',viewHighScores)
 
 landingPage();
 
